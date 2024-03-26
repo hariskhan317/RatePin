@@ -15,11 +15,11 @@ router.post('/register', async(req, res) => {
         });
 
         const user = await newUser.save();
-        res.status(200).send(user._id);
+        res.status(200).json(user._id);
 
     } catch (err) {
         console.error("Error in registration:", err);
-        res.status(500).send("Internal Server Error");
+        res.status(500).json("Internal Server Error");
     }
 });
 
@@ -30,18 +30,18 @@ router.post('/login', async (req, res) => {
     try {
         const user = await User.findOne({ username: req.body.username })
         if (!user) {
-            return res.status(404).send("wrong Username or Password")
+            return res.status(404).json("wrong Username or Password")
         }
 
         const validatePassword = await bcrypt.compare(req.body.password, user.password);
         if (!validatePassword) {
-            return res.status(404).send("wrong Username or Password")
+            return res.status(404).json("wrong Username or Password")
         }
 
-        res.status(200).send({ _id: user._id, username: username })
+        res.status(200).json({ _id: user._id, username: user.username })
 
     } catch (err) {
-        res.status(500).send(err);
+        res.status(500).json(err);
         console.log(err)
     }
 })
