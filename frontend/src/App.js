@@ -94,7 +94,7 @@ function App() {
     }
 
     try {
-      const response = await axios.post("/api/pins", newPin);
+      const response = await axios.post("/pins", newPin);
       setPins([...pins, response.data]);
     } catch (err) {
       console.log(err)
