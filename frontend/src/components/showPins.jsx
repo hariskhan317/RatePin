@@ -32,12 +32,14 @@ export default function showPins({ newTitle, pin, currentUser, currentPlaceId, s
           <h1 className="inline border-b-2 border-orange-500 pr-5 pb-1 font-montserrat text-base font-semibold">Review</h1>
           <p className="mt-2 mb-3 font-montserrat text-base font-normal">{pin.desc}</p>
           <h1 className="inline border-b-2 border-orange-500 pr-5 pb-1 font-montserrat text-sm font-semibold">Rating</h1>
-          <Rating
+            <div className='mt-3'>
+            <Rating
             initialRating={pin.rating} // Set the initial rating value
             emptySymbol={<FaRegStar className="text-yellow-500 text-xl" />}
             fullSymbol={<FaStar className="text-yellow-500 text-xl" />}
             readonly // Make the rating readonly, so users can't change it
           />
+          </div>
           <div className='flex gap-5 mt-5 justify-between'>
             <p className="font-montserrat text-sm font-semibold capitalize">{pin.username}</p>
             <p className="font-montserrat text-sm font-semibold">{format(pin.createdAt)}</p>
