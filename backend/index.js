@@ -7,9 +7,9 @@ const pinRoutes = require('./routes/pins')
 const userRoutes = require('./routes/users')
 
 const app = express();
-app.use(cors({ 
+app.use(cors({
     origin: ["https://rate-pin-frontend.vercel.app"],
-    methods: "any", // or methods: "*"
+    methods: "any",
     credentials: true
 }));
 
