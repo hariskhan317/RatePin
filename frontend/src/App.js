@@ -56,7 +56,7 @@ function App() {
   useEffect(() => {
     const getPins = async () => {
       try {
-        const response = await axios.get("https://rate-pin.vercel.app/api/pins");
+        const response = await axios.get("https://rate-pin-backend.vercel.app/api/pins");
         setPins(response.data)
       } catch (err) {
         console.log(err)
@@ -94,7 +94,7 @@ function App() {
     }
 
     try {
-      const response = await axios.post("https://rate-pin.vercel.app/api/pins", newPin);
+      const response = await axios.post("https://rate-pin-backend.vercel.app/api/pins", newPin);
       setPins([...pins, response.data]);
     } catch (err) {
       console.log(err)

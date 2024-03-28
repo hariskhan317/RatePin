@@ -19,7 +19,7 @@ function Signin({ setShowSignin }) {
         }
 
         try {
-            await axios.post('https://rate-pin.vercel.app/api/users/register', newUser);
+            await axios.post('https://rate-pin-backend.vercel.app/api/users/register', newUser);
             setShowError(false);
             setShowSuccess(true);
         } catch (err) {
