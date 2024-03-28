@@ -10,7 +10,7 @@ import Header from "./components/Header";
 
 const API_GETLOCATION = "https://api.openweathermap.org/data/2.5/weather?";
 
-const API_KEY = "";
+const API_KEY = "83061b1a77c5c3ac901c062bffb47019";
 
 function App() {
   const myStorage = window.localStorage;
