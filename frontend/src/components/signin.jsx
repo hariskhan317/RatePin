@@ -19,7 +19,7 @@ function Signin({ setShowSignin }) {
         }
 
         try {
-            await axios.post('/users/register', newUser);
+            await axios.post('https://ratepin.onrender.com/api/users/register', newUser);
             setShowError(false);
             setShowSuccess(true);
         } catch (err) {
