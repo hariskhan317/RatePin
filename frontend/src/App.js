@@ -106,7 +106,7 @@ function App() {
     <>
       <ReactMapGL
         {...viewState}
-        mapboxAccessToken={apiMap}
+        mapboxAccessToken={"pk.eyJ1IjoiaGFyaXNraGFuMzE3IiwiYSI6ImNsdTd1anowNTA5bTAybHBueXZjemU2NXgifQ.q3nxQofCRxGkztdSUxL78g"}
         onMove={evt => setViewState(evt.viewState)}
         mapStyle="mapbox://styles/mapbox/dark-v9"
         style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh' }}
