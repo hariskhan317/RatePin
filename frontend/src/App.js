@@ -56,7 +56,7 @@ function App() {
   useEffect(() => {
     const getPins = async () => {
       try {
-        const response = await axios.get("https://ratepin.onrender.com/api/pins");
+        const response = await axios.get("/pins");
         setPins(response.data)
       } catch (err) {
         console.log(err)
@@ -94,7 +94,7 @@ function App() {
     }
 
     try {
-      const response = await axios.post("https://ratepin.onrender.com/api/pins", newPin);
+      const response = await axios.post("/api/pins", newPin);
       setPins([...pins, response.data]);
     } catch (err) {
       console.log(err)
