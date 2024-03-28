@@ -18,7 +18,7 @@ dotenv.config();
 app.use(express.json());
 
 mongoose
-    .connect(process.env.MONGO_URL)
+    .connect('mongodb+srv://harrisskhan001:DxjQA2Jw7xIxPZON@cluster0.lthjkkj.mongodb.net/ratepin?retryWrites=true&w=majority&appName=Cluster0')
     .then(() => {
         console.log('MongoDb Conneted')
     })
