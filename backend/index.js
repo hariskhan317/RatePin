@@ -28,6 +28,8 @@ app.use('/api/pins', pinRoutes)
 app.use('/api/users', userRoutes)
 
 
-app.listen(5000, () => {
-    console.log('Backend is running')
-})
+const port = process.env.PORT || 5000;
+app.listen(port, () => {
+    console.log(`Listening to ${port}`)
+});
+
