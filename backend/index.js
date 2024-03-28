@@ -7,7 +7,11 @@ const pinRoutes = require('./routes/pins')
 const userRoutes = require('./routes/users')
 
 const app = express();
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ 
+    origin: ["https://rate-pin-frontend.vercel.app"],
+    methods: ["POST", "GET"],
+    credentials: true
+}));
 
 dotenv.config();
 
