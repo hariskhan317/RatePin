@@ -19,7 +19,7 @@ function App() {
   const [pins, setPins] = useState([]);
   const [showLogin, setShowLogin] = useState(false);
   const [showSignin, setShowSignin] = useState(false);
-  const [currentPlaceId, setCurrentPlaceId] = useState(null);
+  const [currentPlaceId, setCurrentPlaceId] = useState('');
   const [newPlace, setNewPlace] = useState([])
   const [showPopup, setShowPopup] = useState(false);
   const [rating, setRating] = React.useState(0);
@@ -40,14 +40,17 @@ function App() {
   useEffect(() => {
     const getLocation = async () => {
       try {
-        const response = await axios.get(`${API_GETLOCATION}lat=${newPlace.lat}&lon=${newPlace.long}&appid=${API_KEY}`)
+        const { lat, long } = newPlace;
+        const response = await axios.get(`${API_GETLOCATION}lat=${lat}&lon=${long}&appid=${API_KEY}`);
         setNewTitle(response.data.name);
       }
       catch (err) {
         console.log(err)
       }
     }
-    getLocation();
+    if (newPlace.lat && newPlace.long) {
+      getLocation();
+    }
   }, [newPlace])
 
   useEffect(() => {
@@ -76,6 +79,8 @@ function App() {
     setShowPopup(!showPopup);
   }
 
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!newPlace) return;
@@ -87,8 +92,6 @@ function App() {
       lat: newPlace.lat,
       long: newPlace.long,
     }
-
-    console.log(newPin)
 
     try {
       const response = await axios.post("/pins", newPin);
@@ -122,6 +125,7 @@ function App() {
               <ShowPins
                 key={pin._id}
                 pin={pin}
+                newTitle={newTitle}
                 viewState={viewState}
                 currentUser={currentUser}
                 currentPlaceId={currentPlaceId}
