@@ -7,7 +7,7 @@ const pinRoutes = require('./routes/pins')
 const userRoutes = require('./routes/users')
 
 const app = express();
-app.use(cors({ origin: 'http://localhost:3003' }));
+app.use(cors({ origin: 'http://localhost:3000' }));
 
 dotenv.config();
 

@@ -5,8 +5,7 @@ const pinSchema = mongoose.Schema({
         type: String,
         min: 3,
         max: 10,
-        require: true,
-        unique: true
+        require: true, 
     },
     title: {
         type: String,

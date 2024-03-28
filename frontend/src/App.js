@@ -1,21 +1,49 @@
 import React, { useEffect, useState } from "react";
-import ReactMapGL, { Marker, Popup } from 'react-map-gl';
+import ReactMapGL from 'react-map-gl';
 import "mapbox-gl/dist/mapbox-gl.css";
-import { FaStar } from "react-icons/fa";
-import { ImLocation2 } from "react-icons/im";
 import axios from 'axios'
-import { format } from 'timeago.js';
+import ShowPins from "./components/showPins";
+import CreatePins from "./components/createPins";
+import Login from "./components/login";
+import Signin from "./components/signin"
+import Header from "./components/Header";
+
+const API_GETLOCATION = "https://api.openweathermap.org/data/2.5/weather?";
+
+const API_KEY = "";
 
 function App() {
-  const currentUsername = 'haris001'
+  const myStorage = window.localStorage;
+  const [currentUser, setCurrentUser] = useState('');
   const apiMap = process.env.REACT_APP_MAP;
   const [pins, setPins] = useState([]);
+  const [showLogin, setShowLogin] = useState(false);
+  const [showSignin, setShowSignin] = useState(false);
   const [currentPlaceId, setCurrentPlaceId] = useState(null);
+  const [newPlace, setNewPlace] = useState([])
+  const [showPopup, setShowPopup] = useState(false);
+  const [rating, setRating] = React.useState(0);
+  const [newDesc, setNewDesc] = useState('')
+  const [newTitle, setNewTitle] = useState('')
   const [viewState, setViewState] = useState({
     longitude: -107.991707,
     latitude: 61.066692,
     zoom: 4,
   });
+
+  // location
+  useEffect(() => {
+    const getLocation = async () => {
+      try {
+        const response = await axios.get(`${API_GETLOCATION}lat=${newPlace.lat}&lon=${newPlace.long}&appid=${API_KEY}`)
+        setNewTitle(response.data.name);
+      }
+      catch (err) {
+        console.log(err)
+      }
+    }
+    getLocation();
+  }, [newPlace])
 
   useEffect(() => {
     const getPins = async () => {
@@ -34,7 +62,38 @@ function App() {
     setCurrentPlaceId(id);
     setViewState({ ...viewState, latitude: lat, longitude: long });
   };
-  console.log(currentPlaceId)
+
+  const handleAddPlace = (e) => {
+    setNewPlace({
+      long: e.lngLat.lng,
+      lat: e.lngLat.lat
+    })
+    setShowPopup(!showPopup);
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!newPlace) return;
+    const newPin = {
+      username: currentUser,
+      title: newTitle,
+      desc: newDesc,
+      rating: rating,
+      lat: newPlace.lat,
+      long: newPlace.long,
+    }
+
+    console.log(newPin)
+
+    try {
+      const response = await axios.post("/pins", newPin);
+      setPins([...pins, response.data]);
+    } catch (err) {
+      console.log(err)
+    }
+
+  };
+
   return (
     <>
       <ReactMapGL
@@ -43,44 +102,38 @@ function App() {
         onMove={evt => setViewState(evt.viewState)}
         mapStyle="mapbox://styles/mapbox/dark-v9"
         style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh' }}
+        onDblClick={handleAddPlace}
+        transitionDuration="200"
       >
-        {pins.map((pin) => (
-          <div key={pin._id}>
-            <Marker longitude={pin.long} latitude={pin.lat} offsetLeft={-20} offsetTop={-10}>
-              <ImLocation2
-           onClick={() => handleMarkerClick(pin._id, pin.lat, pin.long)}
-                style={{ fontSize: viewState.zoom * 10 }}
-                className={currentUsername === pin.username ? "text-red-500" : "text-blue-500"} />
-            </Marker>
-            {pin._id === currentPlaceId && (
-              <Popup
-                longitude={pin.long}
-                latitude={pin.lat}
-                anchor="left"
-                closeButton={true}
-                closeOnClick={false}
-                onClose={() => setCurrentPlaceId(null)}>
-                <div className="space-y-3 w-80">
-                  <h1 className="font-montserrat text-sm font-semibold">Place</h1>
-                  <p className="font-montserrat text-lg font-normal">{pin.title}</p>
-                  <h1 className="font-montserrat text-sm font-semibold">Review</h1>
-                  <p className="font-montserrat text-lg font-normal">{pin.desc}</p>
-                  <div className="flex gap-1">
-                    <FaStar className="text-yellow-500 text-base" />
-                    <FaStar className="text-yellow-500 text-base" />
-                    <FaStar className="text-yellow-500 text-base" />
-                    <FaStar className="text-yellow-500 text-base" />
-                    <FaStar className="text-yellow-500 text-base" />
-                  </div>
-                  <p className="font-montserrat text-sm font-semibold">{pin.username}</p>
-                  <p className="font-montserrat text-sm font-semibold">{format(pin.createdAt)}</p>
-                </div>
-              </Popup>
+        <Header
+          currentUser={currentUser}
+          setShowLogin={setShowLogin}
+          setShowSignin={setShowSignin}
+        />
+        {currentUser ? (
+          <>
+            {pins.map((pin) => (
+              <ShowPins
+                key={pin._id}
+                pin={pin}
+                viewState={viewState}
+                currentUser={currentUser}
+                currentPlaceId={currentPlaceId}
+                setCurrentPlaceId={setCurrentPlaceId}
+                handleMarkerClick={handleMarkerClick} />
+            ))}
+
+            {showPopup && (
+              <CreatePins newPlace={newPlace} rating={rating} setRating={setRating} setNewDesc={setNewDesc} setCurrentPlaceId={setCurrentPlaceId} handleSubmit={handleSubmit} />
             )}
+          </>
+        ) : (
+          <>
+            {showLogin && <Login setShowLogin={setShowLogin} myStorage={myStorage} setCurrentUser={setCurrentUser} />}
+            {showSignin && <Signin setShowSignin={setShowSignin} />}
+          </>
+        )}
 
-
-          </div>
-        ))}
       </ReactMapGL>
     </>
   );
