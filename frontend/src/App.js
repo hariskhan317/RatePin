@@ -14,7 +14,7 @@ const API_KEY = "83061b1a77c5c3ac901c062bffb47019";
 
 function App() {
   const myStorage = window.localStorage;
-  const [currentUser, setCurrentUser] = useState('');
+  const [currentUser, setCurrentUser] = useState(myStorage.getItem("user"));
   const apiMap = process.env.REACT_APP_MAP;
   const [pins, setPins] = useState([]);
   const [showLogin, setShowLogin] = useState(false);
@@ -30,6 +30,11 @@ function App() {
     latitude: 61.066692,
     zoom: 4,
   });
+
+  const handleLogout = () => {
+    setCurrentUser(null);
+    myStorage.removeItem("user")
+  }
 
   // location
   useEffect(() => {
@@ -106,6 +111,7 @@ function App() {
         transitionDuration="200"
       >
         <Header
+          handleLogout={handleLogout}
           currentUser={currentUser}
           setShowLogin={setShowLogin}
           setShowSignin={setShowSignin}
